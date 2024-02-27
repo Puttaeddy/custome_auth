@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="release.1.0.0" author="prakash.kumar">
+        <createTable tableName="role">
+            <column name="id" type="bigint"  >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="code" type="varchar(100)"/>
+            <column name="name" type="varchar(100)"/>
+            <column name="role_type" type="varchar(100)"/>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="user_id" type="int" >
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fi_id" type="int"/>
+
+            <column name="user_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(128)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email" type="varchar(128)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uniqueEmail"/>
+            </column>
+            <column name="password" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="int"/>
+
+            <column name="mobile_number_id" type="int"/>
+
+            <column name="office_contact_id" type="int"/>
+
+            <column name="alternate_mobile_number_id" type="int"/>
+
+            <column name="address_id" type="int"/>
+
+            <column name="created_at" type="timestamp"/>
+
+            <column name="update_at" type="timestamp"/>
+
+            <column name="created_by" type="varchar(128)"/>
+
+            <column name="updated_by" type="varchar(128)"/>
+
+
+        </createTable>
+
+        <createTable tableName="mobile_number">
+            <column name="id" type="int" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="country_code" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="address">
+            <column name="id" type="int" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="line1" type="VARCHAR(255)"/>
+            <column name="line2" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="state" type="VARCHAR(100)"/>
+            <column name="pincode" type="VARCHAR(200)"/>
+            <column name="country" type="VARCHAR(100)"/>
+        </createTable>
+
+
+
+        <createTable tableName="country">
+            <column name="country_id" type="bigint"  >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="country_name" type="VARCHAR(128)"/>
+            <column name="country_code" type="VARCHAR(250)"/>
+            <column name="phone_code" type="VARCHAR(250)"/>
+        </createTable>
+
+        <createTable tableName="state">
+            <column name="state_id" type="bigint"  >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="state_name" type="VARCHAR(128)"/>
+            <column name="state_code" type="VARCHAR(250)"/>
+            <column name="country_id" type="bigint"/>
+        </createTable>
+
+        <createTable tableName="city">
+            <column name="city_id" type="bigint"  >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="city_name" type="VARCHAR(255)"/>
+            <column name="city_code" type="VARCHAR(250)"/>
+            <column name="state_id" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="release.1.0.1" author="prakash.kumar">
+        <addForeignKeyConstraint  baseColumnNames="role_id"
+
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_user_role"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableCatalogName="cat"
+                                  referencedTableName="role"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+
+        <addForeignKeyConstraint  baseColumnNames="address_id"
+
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_user_address"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableCatalogName="cat"
+                                  referencedTableName="address"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+        <addForeignKeyConstraint  baseColumnNames="mobile_number_id"
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_user_contacts"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableCatalogName="cat"
+                                  referencedTableName="mobile_number"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+        <addForeignKeyConstraint  baseColumnNames="office_contact_id"
+
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_user_office_contacts"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableCatalogName="cat"
+                                  referencedTableName="mobile_number"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+        <addForeignKeyConstraint  baseColumnNames="alternate_mobile_number_id"
+
+                                  baseTableName="users"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_user_alternate_contacts"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="id"
+                                  referencedTableCatalogName="cat"
+                                  referencedTableName="mobile_number"
+                                  referencedTableSchemaName="public"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet  id="release.1.0.2" author="prakash.kumar" >
+        <addAutoIncrement catalogName="cat"
+                          columnDataType="int"
+                          columnName="id"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="05"
+                          tableName="role"/>
+
+
+        <addAutoIncrement catalogName="cat"
+                          columnDataType="int"
+                          columnName="user_id"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="01"
+                          tableName="users"/>
+    </changeSet>
+
+    <changeSet  id="release.1.0.3" author="prakash.kumar">
+        <comment>Inserting Roll table</comment>
+        <insert tableName="role">
+            <column name="id" value="1"/>
+            <column name="code" value="SUPER_ADMIN"/>
+            <column name="name" value="Super_Admin"/>
+            <column name="role_type" value="ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" value="2"/>
+            <column name="code" value="COMPANY_USER"/>
+            <column name="name" value="Company_User"/>
+            <column name="role_type" value="ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" value="3"/>
+            <column name="code" value="FI_USER"/>
+            <column name="name" value="Fi_User"/>
+            <column name="role_type" value="FI"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet  id="release.1.0.4" author="prakash.kumar" runInTransaction="false">
+        <loadData tableName="country" file="db/data/countryAndCode.csv">
+            <column name="country_id" header="country_id" />
+            <column name="country_name" header="country_name" />
+            <column name="country_code" header="country_code" />
+            <column name="phone_code" header="phone_code" />
+        </loadData>
+    </changeSet>
+    <changeSet  id="release.1.0.5" author="prakash.kumar" runInTransaction="false">
+        <loadData tableName="state" file="db/data/stateAndCode.csv">
+            <column name="state_id" header="state_id" />
+            <column name="state_name" header="state_name" />
+            <column name="state_code" header="state_code" />
+            <column name="country_id" header="country_id" />
+        </loadData>
+    </changeSet>
+    <changeSet  id="release.1.0.6" author="prakash.kumar" runInTransaction="false">
+        <loadData tableName="city" file="db/data/cityAndCode.csv">
+            <column name="city_id" header="city_id" />
+            <column name="city_name" header="city_name" />
+            <column name="city_code" header="city_code" />
+            <column name="state_id" header="state_id" />
+        </loadData>
+    </changeSet>
+
+    <changeSet id="release.1.0.7" author="hari">
+        <createTable tableName="fi_details">
+            <column name="id" type="BIGINT" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="op_id" type="VARCHAR(255)"/>
+            <column name="fi_name" type="VARCHAR(255)"/>
+            <column name="logo" type="BLOB"/>
+            <column name="office_contact_id" type="int"/>
+            <column name="alternate_mobile_number_id" type="int"/>
+            <column name="address_id" type="int"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="update_at" type="timestamp"/>
+            <column name="created_by" type="varchar(128)"/>
+            <column name="updated_by" type="varchar(128)"/>
+        </createTable>
+
+
+        <createTable tableName="fi_modules">
+            <column name="id" type="bigint" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="module_name" type="varchar(256)">
+                <constraints nullable="false" />
+            </column>
+            <column name="module_description" type="varchar(256)" />
+            <column name="is_default_module" type="boolean" defaultValue="false" />
+        </createTable>
+        <createTable tableName="fi_module_mapping">
+            <column name="id" type="bigint" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="fi_id" type="bigint"/>
+            <column name="op_id" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="module_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="release.1.0.8" author="hari">
+
+        <addForeignKeyConstraint baseTableName="fi_details"
+                                 baseColumnNames="office_contact_id"
+                                 referencedTableName="mobile_number"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_fi_details_office_contacts"/>
+
+
+        <addForeignKeyConstraint baseTableName="fi_details"
+                                 baseColumnNames="alternate_mobile_number_id"
+                                 referencedTableName="mobile_number"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_fi_details_contacts"/>
+
+
+
+        <addForeignKeyConstraint baseTableName="fi_details"
+                                 baseColumnNames="address_id"
+                                 referencedTableName="address"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_fi_details_address"/>
+
+
+        <addForeignKeyConstraint
+                baseTableName="fi_module_mapping"
+                baseColumnNames="fi_id"
+                referencedTableName="fi_details"
+                referencedColumnNames="id"
+                constraintName="fk_fi_module_mapping_fi_details" />
+    </changeSet>
+
+
+    <changeSet  id="release.1.0.10" author="hari">
+        <comment>Inserting Module data into table</comment>
+        <insert tableName="fi_modules">
+            <column name="id" value="1"/>
+            <column name="module_name" value="Party"/>
+            <column name="module_description" value="party related modules"/>
+            <column name="is_default_module" value="true"/>
+        </insert>
+        <insert tableName="fi_modules">
+            <column name="id" value="2"/>
+            <column name="module_name" value="Saving"/>
+            <column name="module_description" value="Saving related modules"/>
+            <column name="is_default_module" value="false"/>
+        </insert>
+    </changeSet>
+    <changeSet id="release.1.0.11" author="pradeep">
+        <createTable tableName="login_state">
+            <column name="id" type="int" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(20)"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+        <createTable tableName="user_token_details">
+            <column name="id" type="int" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="access_token" type="VARCHAR(1048)"/>
+            <column name="id_token" type="VARCHAR(1048)"/>
+            <column name="refresh_token" type="VARCHAR(256)"/>
+            <column name="user_id" type="int"/>
+            <column name="fi_id" type="int"/>
+            <column name="expire_at" type="timestamp"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="release.1.0.11" author="prakash.kumar">
+        <insert tableName="fi_details">
+            <column name="id" value="-1"/>
+            <column name="op_id" value="dummy"/>
+            <column name="fi_name" value="dummy"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
+   
